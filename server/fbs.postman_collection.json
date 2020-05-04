@@ -1,0 +1,288 @@
+{
+	"info": {
+		"_postman_id": "1c5bd4bc-7f79-478c-a3f6-6f946a55e5b4",
+		"name": "fbs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CURD Flights",
+			"item": [
+				{
+					"name": "INDEX",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{flight}}",
+							"host": [
+								"{{flight}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{flight}}/5eafbf393775bf3bac97c917",
+							"host": [
+								"{{flight}}"
+							],
+							"path": [
+								"5eafbf393775bf3bac97c917"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FILTER",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{flight}}/?lowLimitTime=2020-05-04",
+							"host": [
+								"{{flight}}"
+							],
+							"path": [
+								""
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "Schowalterburgh",
+									"disabled": true
+								},
+								{
+									"key": "to",
+									"value": "Lake Yvonne",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "Inc",
+									"disabled": true
+								},
+								{
+									"key": "upLimitTime",
+									"value": "2020-05-10",
+									"disabled": true
+								},
+								{
+									"key": "lowLimitTime",
+									"value": "2020-05-04"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "06f46ab6-2a76-4398-82df-f1e4431e999e",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\":\"{{$randomCompanySuffix}}\",\n    \"from\":\"{{$randomCity}}\",\n    \"to\":\"{{$randomCity}}\",\n    \"time\":\"{{$randomDateFuture}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}flight/new",
+							"host": [
+								"{{url}}flight"
+							],
+							"path": [
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\":\"{{$randomCompanySuffix}}\",\n    \"from\":\"{{$randomCity}}\",\n    \"to\":\"{{$randomCity}}\",\n    \"time\":\"{{$randomDateFuture}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{flight}}/5eafbf393775bf3bac97c917",
+							"host": [
+								"{{flight}}"
+							],
+							"path": [
+								"5eafbf393775bf3bac97c917"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiRXJhIiwiYWdlbnQiOnRydWUsImlhdCI6MTU4ODYxMjMxM30.JY4j4aTHxU2uOWCxwWBEfvujdgr15O8ckNEMhzrrN3A",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "30ac1b08-d300-4c41-8a68-24f19b9907f3",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "115620e3-9911-4b1e-afa8-7349ca1d7149",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Index",
+			"item": [
+				{
+					"name": "Sign Up",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\":\"{{$randomFirstName}}\",\n\t\"password\":\"{{$randomPassword}}\",\n\t\"agent\":\"{{$randomBoolean}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}signup",
+							"host": [
+								"{{url}}signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\":\"Era\",\n\t\"password\":\"_uf4AfQc2YW8eP4\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}login",
+							"host": [
+								"{{url}}login"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Hello World",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}",
+					"host": [
+						"{{url}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "798b176b-e1a4-41b1-8ac0-f92d1551b46a",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "2b29486b-66c6-43a8-8cef-c5c4df64411b",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "fc2f9ef3-1ace-4805-9024-ada715c4e7a8",
+			"key": "url",
+			"value": "http://localhost:3000/",
+			"type": "string"
+		},
+		{
+			"id": "c27af6ec-83fe-4340-bdee-991a58b80a53",
+			"key": "flight",
+			"value": "http://localhost:3000/flight",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}

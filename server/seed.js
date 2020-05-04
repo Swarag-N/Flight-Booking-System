@@ -14,7 +14,8 @@ async function seedFunction (){
             "name":fake.name.firstName(),
             "from":fake.address.city(),
             "to":fake.address.city(),
-            "time":fake.date.recent()
+            "time":fake.date.recent(),
+            "owned":"5eafffe34cda8a2c3430e7b1"
         }
         await flight.create(flightSample,(err,created)=>{
             if (err) throw  err;
