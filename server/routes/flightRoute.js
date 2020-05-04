@@ -16,11 +16,21 @@ function countProperties(obj) {
 }
 
 //READ
-router.get('/', function (req, res) {
-    Flight.find({}, (onerror, foundFlights) => {
+router.get('/', async function  (req, res) {
+    if(req.query['upLimitTime'] || req.query['lowLimitTime']){
+        req.query["time"]={}
+        // req.query["time"] = {$lte : new Date(req.query['upLimitTime']).toISOString(),$gte:new Date(req.query['lowLimitTime']).toISOString()}
+        // req.query["time"] = {$lte:req.query['upLimitTime'],$gte:req.query['lowLimitTime']}
+        req.query['upLimitTime'] && (req.query["time"]['$lte']=req.query['upLimitTime'])
+        req.query['lowLimitTime'] && (req.query["time"]['$gte']=req.query['lowLimitTime'])
+        delete req.query['upLimitTime'];
+        delete req.query['lowLimitTime'];
+    }
+    await Flight.find(req.query, (onerror, foundFlights) => {
+        console.log(req.query)
         if (onerror) {
-            console.warn(onerror);
-            response.redirect("/");
+            // console.warn(onerror);
+            res.send(onerror)
         } else {
             res.json(foundFlights)
         }
@@ -100,5 +110,6 @@ router.delete("/:id", (request, response) => {
         }
     })
 });
+
 
 module.exports = router;
