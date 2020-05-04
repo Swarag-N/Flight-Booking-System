@@ -2,6 +2,7 @@ const express = require('express');
 const createError = require('http-errors');
 const router = express.Router();
 const Flight = require('../models/Flight')
+const authenticate = require('./middlewareAuth')
 
 function countProperties(obj) {
     let count = 0;
@@ -37,11 +38,11 @@ router.get('/', async function  (req, res) {
     });
 });
 
-router.get('/new', (request, response) => {
+router.get('/new',authenticate.authenticateToken,authenticate.isAgent ,(request, response) => {
     response.status(200).json()
 });
 
-router.post('/new', (request, response) => {
+router.post('/new', authenticate.authenticateToken, (request, response) => {
     console.log(request.body)
     if (countProperties(request.body) === 4) {
         Flight
