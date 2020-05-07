@@ -6,7 +6,7 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser')
 require('dotenv').config()
-
+console.log(process.env.ACCESS_TOKEN)
 
 mongoose.connect(`${process.env.DB_URI}`, {useNewUrlParser: true, useUnifiedTopology: true},()=>{
   console.log("Connected To DB")

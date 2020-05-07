@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt')
-const SALT_ROUNDS = 10
+
 
 const UserSchema = new mongoose.Schema({
     name:{
         type:String,
-        required: true
+        required: true,
+        unique:true
     },
     password:{
         type:String,
@@ -14,13 +14,12 @@ const UserSchema = new mongoose.Schema({
     agent:{
         type:Boolean,
         required:true
+    },
+    rToken:{
+        type:String
     }
 })
 
-UserSchema.pre('save', function(next){
-    this.password = bcrypt.hashSync(this.password, SALT_ROUNDS);
-    next();
-});
 const User = mongoose.model('User',UserSchema)
 
 module.exports = User

@@ -1,4 +1,3 @@
-// "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiRXJhIiwiYWdlbnQiOnRydWUsImlhdCI6MTU4ODYwMDA1NX0.fdbzKen5IHidCMEOsqpRILQ2nA8kYltxA9LClO7Pcxc"
 const jwt = require('jsonwebtoken')
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization']
@@ -6,7 +5,7 @@ function authenticateToken(req, res, next) {
     console.log(authHeader,token)
     if (token == null) return res.sendStatus(401)
 
-    jwt.verify(token, "sfdsdfsdfsdfdsfsdfdsfsdfsdfsdfsdfsdf", (err, user) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN, (err, user) => {
         console.log(err)
         if (err) return res.sendStatus(403)
         req.user = user

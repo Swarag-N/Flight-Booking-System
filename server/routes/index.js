@@ -3,20 +3,26 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken')
+const SALT_ROUNDS = 10
 
+generateAccessToken=(user)=>{
+    return jwt.sign(user,process.env.ACCESS_TOKEN,{expiresIn: "10m"})
+}
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', { title: 'Express' });
+    return res.render('index', { title: 'Express' });
 });
 
 router.post('/signup',async (req,res)=>{
     try {
+        let psd = req.body.password;
+        req.body.password = await bcrypt.hashSync(req.body.password, SALT_ROUNDS);
         User.create(req.body,(err,newUser)=>{
             if(err){
                 res.send(500)
             }else{
-                res.status(202).send([newUser,req.body])
+                res.status(202).send([psd,newUser,req.body])
             }
         })
     } catch {
@@ -24,12 +30,21 @@ router.post('/signup',async (req,res)=>{
     }
 })
 
-// Todo { _id: 5eafffe34cda8a2c3430e7b1,
-//   name: 'Coleman',
-//   password:
-//    '$2b$10$h3HkRnLts.qDgJUohIiZ9elssm.VTagTz8VDmd8mhWBk8UR6B9jhe',
-//   agent: true,
-//   __v: 0 }
+
+router.post('/token',async (req,res)=>{
+    let token = req.body.token
+    if (token==null) res.sendStatus(401)
+    await  jwt.verify(token,process.env.REFRESH_TOKEN, (err,user)=>{
+        if (err) return res.sendStatus(403)
+         User.findById(user._id,async(err,foundUser)=>{
+            if (err) return  res.sendStatus(500)
+            if(!foundUser) return res.sendStatus(404,"UserNotFound")
+            if (foundUser.rToken !== token) return res.status(401).send("User Generated a New Token or Expired")
+            let accessToken = await generateAccessToken(user)
+            res.json({accessToken:accessToken})
+        })
+    })
+})
 
 
 router.post('/login', async (req, res) => {
@@ -37,17 +52,39 @@ router.post('/login', async (req, res) => {
         if (err) throw  err;
         if (!foundUser) throw "no user"
         try {
-            if(await bcrypt.compare(req.body.password, foundUser.password)) {
-                let {name,agent}=foundUser
-                let accessToken = jwt.sign({'name':name,'agent':agent},"sfdsdfsdfsdfdsfsdfdsfsdfsdfsdfsdfsdf")
-                res.json({accessToken:accessToken})
+            let boolResult = await bcrypt.compare(req.body.password,foundUser.password)
+            if(boolResult){
+                let {name,agent,_id}=foundUser
+                let user = {name,agent,_id}
+                console.log(user)
+                let accessToken = await generateAccessToken(user)
+                    // let accessToken = jwt.sign(user,process.env.ACCESS_TOKEN,{expiresIn: "10m"})
+                let refreshToken = jwt.sign(user,process.env.REFRESH_TOKEN)
+                foundUser.rToken = refreshToken
+                foundUser.save()
+                res.json({accessToken,refreshToken})
                 console.log(foundUser,accessToken)
             } else {
-                res.send('Not Allowed')
+                res.status(401).json({foundUser})
             }
         } catch {
             res.status(500).send()
         }
+    })
+})
+
+router.delete('/logout',async (req,res)=>{
+    let token = req.body.token
+    if (token==null) res.sendStatus(401)
+    await  jwt.verify(token,process.env.REFRESH_TOKEN, (err,user)=>{
+        if (err) return res.sendStatus(403)
+        User.findById(user._id,async(err,foundUser)=>{
+            if (err) return  res.sendStatus(500)
+            if(!foundUser) return res.sendStatus(404,"UserNotFound")
+            foundUser.rToken=null
+            foundUser.save()
+            res.sendStatus(202)
+        })
     })
 })
 

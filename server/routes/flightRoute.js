@@ -60,7 +60,7 @@ router.post('/new',auth.authenticateToken,auth.isAgent, (request, response) => {
 });
 
 //SHOW
-router.get('/:id', (request, response) => {
+router.get('/:id',auth.authenticateToken, (request, response) => {
     Flight
         .findById(request.params.id, (onerror, foundFlight
         ) => {
