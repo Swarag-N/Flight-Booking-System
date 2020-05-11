@@ -33,6 +33,22 @@ router.get('/', async function  (req, res) {
     });
 });
 
+router.get('/src',auth.authenticateToken,(req,res)=>{
+    console.log(req.query.name)
+    Flight.fuzzySearch({name:'a'},(err,doc)=>{
+        if (err) throw err
+        console.log(doc)
+    })
+    res.sendStatus(200);
+    // Flight.find(req.query,(err,foundFlights)=>{
+    //     if (err) res.sendStatus(500,()=>{
+    //         throw err
+    //     })
+    //     res.json(foundFlights)
+    // })
+
+})
+
 router.get('/new',auth.authenticateToken,auth.isAgent ,(request, response) => {
     response.status(200).json()
 });

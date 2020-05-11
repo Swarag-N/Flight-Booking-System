@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const User = require('./User')
+const mongoose_fuzzy_searching = require('mongoose-fuzzy-searching');
 
 const FlightSchema = new mongoose.Schema({
     name:{
@@ -15,6 +16,21 @@ const FlightSchema = new mongoose.Schema({
         ref:User,
         required: true
     }
+})
+
+FlightSchema.plugin(mongoose_fuzzy_searching,{
+    fields:[
+        {
+            name: 'name',
+            weight: 3
+        },
+        'from',
+        'to',
+        {
+            name:'time',
+            weight: 10,
+        }
+    ]
 })
 const  Flight = mongoose.model('Flight',FlightSchema)
 

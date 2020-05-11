@@ -23,10 +23,12 @@
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.25.1",
     "mongoose": "^5.9.11",
+    "mongoose-fuzzy-searching": "^1.1.9",
     "morgan": "~1.9.1"
   },
   "devDependencies": {
     "dotenv": "^8.2.0",
-    "faker": "^4.1.0"
+    "faker": "^4.1.0",
+    "locus": "^2.0.4"
   }
 }
