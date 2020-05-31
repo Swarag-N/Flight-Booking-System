@@ -3,28 +3,29 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-// const  db = require('./config/db')
-const Sequelize = require('sequelize');
-require('dotenv').config({path:'server\\db.env'});
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser')
+require('dotenv').config()
+console.log(process.env.ACCESS_TOKEN)
 
-const db = new Sequelize(`${process.env.DB_NAME}`, `${process.env.DB_USER}`, `${process.env.DB_PASSWORD}`, {
-    host: process.env.DB_HOST,
-    dialect: 'postgres'
+mongoose.connect(`${process.env.DB_URI}`, {useNewUrlParser: true, useUnifiedTopology: true},()=>{
+  console.log("Connected To DB")
 });
+//for  deprecationWarning: Mongoose: `findOneAndUpdate()` and `findOneAndDelete()` without the `useFindAndModify`
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useUnifiedTopology', true);
 
-// module.exports = db
-let indexRouter = require('./routes/index');
-let usersRouter = require('./routes/users');
-let flightRouter = require('./routes/flightRoute')
+
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const flightRouter = require('./routes/flightRoute')
+// Todo Add Development ENV
+// const adminRouter = require('./routes/admin')
+
 const app = express();
-
-db.authenticate()
-    .then(() => {
-      console.log('Connection has been established successfully.');
-    })
-    .catch(err => {
-      console.error('Unable to connect to the database:', err);
-    });
+// app.use('/admin',adminRouter)
 
 
 
@@ -33,14 +34,23 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
-app.use(express.json());
+app.use(bodyParser.json())
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// parse application/x-www-form-urlencoded
+// app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+// app.use(bodyParser.json())
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/flight',flightRouter);
+app.use('/flight',flightRouter)
+
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
