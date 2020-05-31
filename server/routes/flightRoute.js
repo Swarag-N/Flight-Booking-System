@@ -1,4 +1,5 @@
 const express = require('express');
+<<<<<<< HEAD
 const createError = require('http-errors');
 const router = express.Router();
 const Flight = require('../models/Flight')
@@ -123,3 +124,17 @@ router.delete("/:id", auth.authenticateToken,auth.isAgent,(request, response) =>
 
 
 module.exports = router;
+=======
+const router = express.Router();
+const Flight = require('../models/Flight')
+
+router.get('/',(res,req)=>{
+    Flight.findAll()
+        .then(f=>console.log(f))
+        .catch(err=>{
+            console.log(err)
+        })
+})
+
+module.exports = router
+>>>>>>> master

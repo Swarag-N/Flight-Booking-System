@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
+<<<<<<< HEAD
+=======
+    <file url="file://$PROJECT_DIR$/client" libraries="{Flight-Booking-System/client/node_modules}" />
+    <file url="file://$PROJECT_DIR$/server/bin/www" libraries="{Flight-Booking-System/client/node_modules}" />
+>>>>>>> master
     <includedPredefinedLibrary name="Node.js Core" />
   </component>
 </project>
