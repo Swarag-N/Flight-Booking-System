@@ -21,10 +21,11 @@ mongoose.set('useUnifiedTopology', true);
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const flightRouter = require('./routes/flightRoute')
-const adminRouter = require('./routes/admin')
+// Todo Add Development ENV
+// const adminRouter = require('./routes/admin')
 
 const app = express();
-app.use('/admin',adminRouter)
+// app.use('/admin',adminRouter)
 
 
 

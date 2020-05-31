@@ -35,7 +35,10 @@ router.get('/', async function  (req, res) {
 
 router.get('/src',auth.authenticateToken,(req,res)=>{
     console.log(req.query.name)
-    Flight.fuzzySearch({name:'a'},(err,doc)=>{
+    let trq = Flight.fuzzySearch('fl').exec();
+    Flight.fuzzySearch('f').then(console.log).catch(console.error);
+    console.log(trq.then())
+    Flight.fuzzySearch({name:'Felicita'},(err,doc)=>{
         if (err) throw err
         console.log(doc)
     })

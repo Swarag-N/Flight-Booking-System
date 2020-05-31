@@ -16,13 +16,12 @@ router.get('/', function(req, res, next) {
 
 router.post('/signup',async (req,res)=>{
     try {
-        let psd = req.body.password;
         req.body.password = await bcrypt.hashSync(req.body.password, SALT_ROUNDS);
         User.create(req.body,(err,newUser)=>{
             if(err){
                 res.send(500)
             }else{
-                res.status(202).send([psd,newUser,req.body])
+                res.status(202).send([newUser,req.body])
             }
         })
     } catch {
@@ -62,8 +61,7 @@ router.post('/login', async (req, res) => {
                 let refreshToken = jwt.sign(user,process.env.REFRESH_TOKEN)
                 foundUser.rToken = refreshToken
                 foundUser.save()
-                res.json({accessToken,refreshToken})
-                console.log(foundUser,accessToken)
+                res.status(202).json({accessToken,refreshToken})
             } else {
                 res.status(401).json({foundUser})
             }
